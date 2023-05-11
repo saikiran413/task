@@ -1,0 +1,39 @@
+
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3">
+        <!-- Sidebar menu -->
+        <div class="list-group"  *ngFor="let item of videoItems" >
+          <a (click)="selectedVideo(item)"  class="list-group-item">{{item.name}}</a>
+        
+        </div>
+      </div>
+      <div class="col-md-9">
+        <!-- Main content -->
+      
+        <video #myVideo controls (play)="onPlay()" (pause)="onPause()" (seeked)="onSeeked()" [src]="videoUrl" width="100%" height="400"></video>
+        <div>
+          <input #seekBar type="range" min="0" max="100" value="0" (input)="onSeekBarChange()">
+        </div>
+       <button class="btn btn-primary" (click)="bookmarkVideo()">+BookMark</button>
+       <button class="btn btn-default">BookMarks</button>
+       <div>
+        <button class="btn btn-info mx-2" (click)="seekToTime(83)">01:23</button>
+        <button class="btn btn-info mx-2" (click)="seekToTime(123)">02:03</button>
+      </div>
+      <div>
+        <button class="btn btn-info m-2" (click)="seekToTime(105)">01:45</button>
+        <button class="btn btn-info m-2"(click)="seekToTime(203)">03:23</button>
+      </div>
+      <div class="timeline">
+        <button class="btn btn-info m-2" (click)="seekToTime(114)">01:54</button>
+        <button class="btn btn-info m-2"(click)="seekToTime(252)">04:12</button>
+      </div>
+
+
+
+    </div>
+
+   
+  </div>
+  </div>

@@ -1,0 +1,39 @@
+<div class="login-container">
+    <h1>signup</h1>
+ <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="username">username<span>*</span></label>
+        <input type="username" id="username" name="username" formControlName="username" required>
+        <div *ngIf="username?.invalid && (username?.dirty || username?.touched)" class="alert alert-danger">
+            <div *ngIf=" username?.errors?.['required']">username is required</div>
+        </div>
+      </div>
+      <div class="form-group iconInput">
+        <label for="password">Password<span>*</span></label>
+        <input type="password" id="password" name="password" formControlName="password">
+      
+        
+          <div *ngIf="password?.errors?.['required']">Password is required.</div>
+   
+      
+      </div>
+      <div class="form-group">
+        <label for="name">name<span>*</span></label>
+        <input type="name" id="name" name="name" formControlName="name" required>
+        <div *ngIf="name?.invalid && (name?.dirty || name?.touched)" class="alert alert-danger">
+            <div *ngIf="name?.errors?.['required']">name must be from sailssoftware.com and must be valid</div>
+        </div>
+      </div>
+      <div>
+        <button class="btn btn-primary" type="submit" [disabled]="signupForm.invalid">signup</button>
+      
+      </div>
+  
+    </form> 
+
+   
+  </div>
+
+
+
+ 
