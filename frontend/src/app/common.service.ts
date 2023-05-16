@@ -38,17 +38,15 @@ console.log("headers",headers)
     return this.http.post(this.url + 'api/videos',body, { headers })
   }
 
-  bookmarkVideosPost(id:number, stamp:string){
-let body={
-  timestamp: stamp
-}
+  bookmarkVideosPost(time:any, id:number){
+
     const headers = new HttpHeaders()
     .set('Authorization', 'Bearer ' + localStorage.getItem('token'));
 console.log("headers",headers)
-    return this.http.post(this.url + 'api/videos/bookmarks/' + id, body,{ headers } )
+    return this.http.post(this.url + 'api/videos/bookmarks/' + id,{time},{ headers } )
   }
 
-  bookmarkVideos(id:number){
+  getbookmarkVideos(id:number){
     const headers = new HttpHeaders()
     .set('Authorization', 'Bearer ' + localStorage.getItem('token'));
 console.log("headers",headers)

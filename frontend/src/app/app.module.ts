@@ -9,10 +9,10 @@ import { SignupComponent } from './signup/signup/signup.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonService } from './common.service';
 import { HttpClientModule } from '@angular/common/http';
-import { VideoPlayerComponent } from './routes/home/app-video-palyer.component';
+
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, LoginComponent, SignupComponent,VideoPlayerComponent ],
+  declarations: [AppComponent, HomeComponent, LoginComponent, SignupComponent ],
   imports: [BrowserModule, AppRoutingModule,HttpClientModule,
 ReactiveFormsModule],
   providers: [CommonService],

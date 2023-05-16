@@ -7,9 +7,9 @@ import { FormControl, FormGroup } from '@angular/forms';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit, AfterViewInit {
-  videoItems: any=[];
-  videoUrl : SafeResourceUrl;
+export class HomeComponent implements OnInit {
+  videoItems: any = [];
+  videoUrl: SafeResourceUrl;
   singleVideo: any;
   bookmarksList: any;
   @ViewChild('myVideo') myVideo!: ElementRef;
@@ -18,103 +18,87 @@ export class HomeComponent implements OnInit, AfterViewInit {
   getID: any;
   bookmarkData: any;
   postForm!: FormGroup<{ name: FormControl<any>; url: FormControl<any>; }>
+  getId: any;
+  videoName: any;
 
 
-  ngAfterViewInit() {
-    console.log(this.myVideo.nativeElement);
-    console.log(this.seekBar.nativeElement);
-  }
+  constructor(private common: CommonService, private sanitizer: DomSanitizer) {
+    this.videoUrl = ''
+    this.common.getVideos().subscribe(res => {
+      this.videoItems = res.videos;
+      console.log(this.videoItems)
 
-  constructor(private common:CommonService, private sanitizer: DomSanitizer){
-   this.videoUrl=''
-   this.common.getVideos().subscribe(res=>{
-    this.videoItems = res.videos;
-    console.log(this.videoItems)
 
-    
 
-    this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(res.videos[0].url) as string; 
-  
-      })
-   
+      this.videoUrl = this.sanitizer.bypassSecurityTrustResourceUrl(res.videos[0].url) as string;
+
+    })
+
   }
   ngOnInit(): void {
-   
-     
-   }
-   
 
- selectedVideo(item:any){
-this.videoUrl =  item.url as string;
-let body ={
-  video: {
-    name: item.name,
-    url: item.url
+
   }
-}
-this.common.postVideos(body).subscribe(res=>{
-this.getID= res.videoId
-this.getbookmark(this.getID)
-})
-}
 
 
-onPlay() {
-  const timestamp = this.myVideo.nativeElement.currentTime;
-  console.log('Current timestamp:', timestamp);
-  this.saveTimestamp =timestamp
-}
+  selectedVideo(item: any) {
+    this.videoName = item.name
+    this.getID = item.id
+    this.videoUrl = item.url as string;
 
-onPause() {
-  const timestamp = this.myVideo.nativeElement.currentTime;
-  this.saveTimestamp =timestamp
-  console.log('Current timestamp:', timestamp);
-}
+  }
 
-onSeeked() {
-  const timestamp = this.myVideo.nativeElement.currentTime;
-  console.log('Current timestamp:', timestamp);
-
-  this.saveTimestamp =timestamp
-
-}
-
-seekToTime(time: number) {
-  const video: HTMLVideoElement = this.myVideo.nativeElement;
-  video.currentTime = time;
-  video.play();
-}
-
-onSeekBarChange() {
-  const value = this.seekBar.nativeElement.value;
-  const timestamp = this.myVideo.nativeElement.duration * (value / 100);
-  console.log('Current timestamp:', timestamp);
-}
-
-
-
-bookmarkVideo(){
-
-  this.common.bookmarkVideosPost(this.getID, this.saveTimestamp).subscribe(res=>{
-
-    this.bookmarksList = res
-    console.log(this.bookmarksList.bookmarks)
-
-  })
-}
+  postVideo(){
+    let body = {
+      video: {
+        name: this.videoName,
+               url: this.videoUrl
+      }
+    }
+    this.common.postVideos(body).subscribe(res => {
+      this.getID = res.videoId
+     
+    })
+  
+  }
 
 
 
 
+  onSeeked() {
+    const timestamp = this.myVideo.nativeElement.currentTime;
+    console.log('Current timestamp:', timestamp);
 
-getbookmark(res:any){
-  this.common.bookmarkVideos(res).subscribe(res=>{
+    this.saveTimestamp = timestamp
 
-    const data=res
-    console.log(data);
-    
-  this.bookmarkData= this.bookmarksList.bookmarks
+  }
 
-  })
-}
+  seekToTime(time: number) {
+    const video: HTMLVideoElement = this.myVideo.nativeElement;
+    video.currentTime = time;
+    video.play();
+  }
+
+
+  bookmarkVideo() {
+    if(this.getID == undefined){
+      this.getID = this.videoItems[0].id
+    } 
+    const video: HTMLVideoElement = this.myVideo.nativeElement;
+    const timestamp = video.currentTime
+    const timestring = String(timestamp)
+    this.common.bookmarkVideosPost( timestring,this.getID).subscribe(res => {
+      this.bookmarksList = res
+
+
+   })
+  }
+
+  getbookmark() {
+    this.common.getbookmarkVideos(this.getID).subscribe(res => {
+      const data = res
+      this.bookmarkData = this.bookmarksList.bookmarks
+
+    })
+  }
 }
